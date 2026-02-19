@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Freedom Wall Featured Post Generator</title>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+@font-face {
+    font-family: 'HarmonyOS Sans';
+    src: url('https://cdn.jsdelivr.net/gh/wan2land/harmonyos-font/HarmonyOS_Sans_Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: 'HarmonyOS Sans', sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+
+textarea {
+    width: 600px;
+    height: 120px;
+    font-size: 20px;
+    padding: 10px;
+    margin-bottom: 10px;
+    resize: none;
+    font-family: 'HarmonyOS Sans', sans-serif;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    background: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#post {
+    width: 600px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 30px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.12);
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.profile-pic {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.name-section {
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.name img {
+    width: 20px;
+    margin-left: 6px;
+}
+
+.date {
+    font-size: 13px;
+    color: #65676b;
+    margin-top: 3px;
+    text-transform: none; /* prevent CSS changes */
+}
+
+.content {
+    font-size: 26px;
+    margin-top: 15px;
+    line-height: 1.35em;
+    white-space: pre-wrap;
+}
+</style>
+</head>
+<body>
+
+<h2>Freedom Wall Featured Post Generator</h2>
+<!--
+Copyright © 2026 DCC
+This software is proprietary and confidential.
+Unauthorized copying or redistribution is prohibited.
+-->
+<textarea id="textInput" placeholder="Enter your featured Freedom Wall text here"></textarea>
+<br>
+<button onclick="generate()">Generate Post</button>
+<button onclick="copyImage()">Copy Image to Clipboard</button>
+
+<div id="post" style="display:none;">
+    <div class="header">
+        <img class="profile-pic"
+        crossorigin="anonymous"
+        src="https://scontent.fsin17-1.fna.fbcdn.net/v/t39.30808-1/633947402_854425594330962_8165139976532958817_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=104&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=01AVBrytCvQQ7kNvwFVaGNd&_nc_oc=Adlz9a29_f__Yfz5pUgqdBMDtbdG-zyJZBfR_HMVaqTgm2rw_RTmFI&_nc_zt=24&_nc_ht=scontent.fsin17-1.fna&_nc_gid=HVASPxPdu8K1k4bJ-M8M5w&oh=00_AfvTTJ9lGkzJ7AEmoxGPDsv6nEaHHEhvkz_MVXArHrZ_qg&oe=699CA922">
+
+        <div class="name-section">
+            <div class="name">
+                HSP BookWorms Freedom Wall
+                <img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" crossorigin="anonymous">
+            </div>
+            <div class="date" id="postDate"></div>
+        </div>
+    </div>
+
+    <div class="content" id="postText"></div>
+</div>
+
+<script>
+function formatDate() {
+    const today = new Date();
+
+    const days = [
+        "Sunday","Monday","Tuesday","Wednesday",
+        "Thursday","Friday","Saturday"
+    ];
+
+    const months = [
+        "January","February","March","April","May","June",
+        "July","August","September","October","November","December"
+    ];
+
+    const dayName = days[today.getDay()];
+    const monthName = months[today.getMonth()];
+    const dayNumber = today.getDate();
+
+    return dayName + ", " + monthName + " " + dayNumber;
+}
+
+function generate() {
+    const text = document.getElementById("textInput").value.trim();
+    if (!text) {
+        alert("Please enter some text!");
+        return;
+    }
+
+    document.getElementById("postText").textContent = text;
+    document.getElementById("postDate").textContent = formatDate();
+    document.getElementById("post").style.display = "block";
+}
+
+function copyImage() {
+    const postElem = document.getElementById("post");
+
+    if (postElem.style.display === "none") {
+        alert("Generate the post first!");
+        return;
+    }
+    
+    html2canvas(postElem, {
+        useCORS: true,
+        scale: 2
+    }).then(canvas => {
+        canvas.toBlob(blob => {
+            const item = new ClipboardItem({ "image/png": blob });
+            navigator.clipboard.write([item]).then(() => {
+                alert("✅ Image copied!");
+            });
+        });
+    });
+}
+</script>
+
+</body>
+</html>
